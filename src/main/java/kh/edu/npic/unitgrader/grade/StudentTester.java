@@ -200,7 +200,7 @@ public class StudentTester {
 				//String testName = f.getName().substring(0, f.getName().indexOf('.'));
 				
 				// Runs the TestCaseRunner program, with full classpath, and the test to be evaluated as a command-line argument.
-				ProcessBuilder pb = new ProcessBuilder("java", "-cp", fullClasspath, "autograde.grade.TestCaseRunner", absoluteTestCasePath.toString(), currentTestCaseName);
+				ProcessBuilder pb = new ProcessBuilder("java", "-cp", fullClasspath, "kh.edu.npic.unitgrader.grade.TestCaseRunner", absoluteTestCasePath.toString(), currentTestCaseName);
 				pb.directory(submission);  // Set the active directory to the student's actual directory.
 				process = pb.start();
 			} 
