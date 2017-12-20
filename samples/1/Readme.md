@@ -2,20 +2,20 @@
 
 This sample serves to demonstrate an example setup for utilizing the UnitGrader for student assignments.
 
-# /bin
+## /bin
 
 The /bin folder contains the JUnit test cases needed to assess student assignments.  If this folder does not
 include the *.test specification file, it should lie directly within the folder containing said file.
 
 If this folder includes the *.test specification file, the folder may safely be renamed as desired.
 
-# *.test  (here, AssignmentGrader.test)
+## *.test  (here, AssignmentGrader.test)
 
 This file contains a pre-made UnitGrader test specification usable to grade assignments.  It should be created
 either directly outside of a /bin folder containing the relevant Junit tests or within the folder, and should
 not be moved relative to said folder after creation.
 
-# submissions.zip
+## submissions.zip
 
 This zip is a sample batch download from an online learning management software solution, containing a set of 
 student submission files.  This should generally contain one *.zip per student as extracted directly from the 
