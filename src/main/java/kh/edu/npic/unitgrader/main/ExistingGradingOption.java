@@ -43,7 +43,14 @@ public class ExistingGradingOption extends Option
 				if(f.isDirectory()) return true;
 				
 				int extStart = f.getName().lastIndexOf('.');
-				return (f.getName().substring(extStart).equals(".xml"));
+				if(extStart == -1) 
+				{
+					return false;
+				}
+				else
+				{
+					return (f.getName().substring(extStart).equals(".xml"));
+				}
 			}
 
 			@Override

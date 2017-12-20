@@ -30,7 +30,8 @@ repositories {
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.22'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
     compile 'junit:junit:4.12'
     compile 'com.thoughtworks.xstream:xstream:1.4.10'
     compile 'org.apache.commons:commons-csv:1.5'

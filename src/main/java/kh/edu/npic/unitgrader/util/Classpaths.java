@@ -10,44 +10,25 @@ public final class Classpaths
 	{
 	}
 	
-	public static String forFolderJARs(File folder)
-	{
-		return forFolderJARs(folder, false, null);
-	}
-	
-	private static String forFolderJARs(File folder, boolean rec, String resolvePath)
-	{		
-		File[] jars = folder.listFiles(new JavaJARFileFilter());
+	public static String getCurrent( ) {
+		String cp = System.getProperty("java.class.path");
+		String[] cpElements = cp.split(File.pathSeparator);
 		
-		String cp = "";
+		StringBuilder cpBuilder = new StringBuilder();
 		
-		for(File jar:jars)
+		// For Windows:  \jre\lib\ denotes a Java system library.
+		// We'll let Java handle its own requirements for the classpath.
+		String jreLibFilter = File.separator + "jre" + File.separator + "lib" + File.separator;
+		
+		for(String s:cpElements)
 		{
-			if(resolvePath == null)
-				cp += jar.getPath() + File.pathSeparator;
-			else cp += new File(resolvePath).toPath().resolve(jar.toPath()) + File.pathSeparator;
-		}
-		
-		if(rec)
-		{
-			File[] dirs = folder.listFiles(new DirectoryFilter());
-			
-			for(File dir:dirs)
+			if(!s.contains(jreLibFilter))
 			{
-				cp += forFolderJARs(dir, true, resolvePath);
+				cpBuilder.append(s);
+				cpBuilder.append(File.pathSeparator);
 			}
 		}
 		
-		return cp;
-	}
-	
-	public static String forLibJARs()
-	{
-		return forFolderJARs(new File("lib"), true, null);
-	}
-	
-	public static String forLibJARs(String resolvePath)
-	{
-		return forFolderJARs(new File("lib"), true, resolvePath);
+		return cpBuilder.toString();
 	}
 }

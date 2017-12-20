@@ -115,7 +115,8 @@
       <compactComments>false</compactComments>
     </tests>
   </testCases>
-  <imports/>
+  <imports>
+  </imports>
   <deletes/>
   <lmsIdentifier>Canvas</lmsIdentifier>
 </testspec>

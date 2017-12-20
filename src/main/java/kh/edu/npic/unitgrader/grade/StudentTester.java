@@ -189,13 +189,12 @@ public class StudentTester {
 			
 			try 
 			{	
-				String fullClasspath = Classpaths.forLibJARs(System.getProperty("user.dir")) + // Include LIBs.
+				String fullClasspath = Classpaths.getCurrent() +   // Include LIBs and current code.
 										"." + File.pathSeparator + // Include the active directory - which will be that of the STUDENT after an upcoming line. 
 										//absoluteTestCasePath.toPath().resolve(f.toPath()).getParent() + File.pathSeparator + // Include the test's library.
 										DirectoryManager.testSpecSelectedDirectory + File.pathSeparator + // Include the test spec's base folder.  (test code should be filed underneath this as appropriate.
-										DirectoryManager.testSpecSelectedDirectory + File.separator + "bin" + File.pathSeparator + // or within a bin folder inside of that.  Might make things better organized.
-										new File(System.getProperty("user.dir")) + File.pathSeparator + // Include this program's *.class files (outside of bin folder)
-										new File(System.getProperty("user.dir") + File.separator + "bin") + File.pathSeparator; // Include this program's *.class files. (in bin folder)
+										DirectoryManager.testSpecSelectedDirectory + File.separator + "bin" + File.pathSeparator;  // or within a bin folder inside of that.  Might make things better organized.
+
 				
 				//String testName = f.getName().substring(0, f.getName().indexOf('.'));
 				
@@ -207,6 +206,10 @@ public class StudentTester {
 			catch (IOException e) 
 			{
 				throw new TestingException("Could not execute test case " + f.getName() + " for student " + name + ".", e);
+			}
+			catch (RuntimeException e)
+			{
+				throw new TestingException("Error occurred during test case setup.", e);
 			}
 			
 			BufferedReader inPipe = new BufferedReader(new InputStreamReader(process.getInputStream()));
