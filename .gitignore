@@ -2,6 +2,7 @@
 build/
 bin/
 samples/**/submissions/
+!/samples/**/bin/
 
 config.ini
 
