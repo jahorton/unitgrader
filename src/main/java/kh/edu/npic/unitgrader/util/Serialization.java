@@ -11,9 +11,17 @@ public final class Serialization
 {
 	private static XStream xstream = new XStream();
 	
+	private static Class<?>[] serializables = new Class[] {
+		kh.edu.npic.unitgrader.util.preferences.Configuration.class,
+		kh.edu.npic.unitgrader.util.TestCase.class,
+		kh.edu.npic.unitgrader.util.TestSpecification.class
+	};
+	
 	static
 	{
 		xstream = new XStream();
+		XStream.setupDefaultSecurity(xstream);
+		xstream.allowTypes(serializables);
 		
 		setupAliasing();
 	}

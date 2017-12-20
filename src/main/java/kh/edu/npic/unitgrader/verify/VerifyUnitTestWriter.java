@@ -409,6 +409,8 @@ public class VerifyUnitTestWriter
 	private void addImports()
 	{
 		text.append("import org.junit.Assert;\n");
+		text.append("import org.junit.Test;\n");
+		text.append("\n");
 		text.append("import java.lang.reflect.*;\n");
 		text.append("\n");
 	}

@@ -32,7 +32,7 @@ dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.22'
     compile 'junit:junit:4.12'
-    compile 'com.thoughtworks.xstream:xstream:1.4.10-java7'
+    compile 'com.thoughtworks.xstream:xstream:1.4.10'
     compile 'org.apache.commons:commons-csv:1.5'
     compile 'org.zeroturnaround:zt-zip:1.9'
 
