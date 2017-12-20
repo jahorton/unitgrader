@@ -15,11 +15,12 @@ This file contains a pre-made UnitGrader test specification usable to grade assi
 either directly outside of a /bin folder containing the relevant Junit tests or within the folder, and should
 not be moved relative to said folder after creation.
 
-# /submissions
+# submissions.zip
 
-This folder contains the set of student submission files as downloaded from a learning management software 
-solution.  For submission downloads from Sakai and Canvas, this should contain one *.zip per student as extracted
-directly from the batch download folder.
+This zip is a sample batch download from an online learning management software solution, containing a set of 
+student submission files.  This should generally contain one *.zip per student as extracted directly from the 
+batch download folder.
 
-It need not be named submissions and may be stored anywhere on the system; it need not be placed relative to
-the testing suite.
+For testing to occur, it should be decompressed to a new folder; if extracting within the repo, we suggest 
+the .gitignore'd /submissions folder.  In general, the decompression results need not be named /submissions 
+and may be stored anywhere on the system.
