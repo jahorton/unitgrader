@@ -16,7 +16,8 @@ version='1.0'
 jar {
 	manifest {
 		attributes 	'Implementation-Title': 'Unit Grader',
-					'Implementation-Version': version
+					'Implementation-Version': version,
+					'Main-Class': 'kh.edu.npic.unitgrader.main.SuiteEntry' 
 	}
 }
 
