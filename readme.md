@@ -8,3 +8,6 @@ At present the system is relatively small-scale and is based upon the use of JUn
 
 If using Eclipse, use File > Import, then choose the Gradle > Existing Gradle Project option.  Then, select the folder where you
 cloned this repository to import the project for development and Eclipse's wizard should automatically set things up correctly from there.
+
+You may need to go to Window > Preferences, then Java > Installed JREs to ensure that Eclipse is using a JDK installation instead of
+a JRE when running the project, as a JDK is necessary for the UnitGrader to compile student submissions.
