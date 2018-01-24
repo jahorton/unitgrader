@@ -120,19 +120,18 @@ public class NumericalMenu
 	public static int getIntInput(String prompt)
 	{
 		if(prompt == null) throw new NullPointerException("Prompt may not be null!");
-		Scanner input = new Scanner(System.in);
 
 		do
 		{
 			System.out.print(prompt);
 			
-			if(input.hasNextInt())
+			if(Console.in().hasNextInt())
 			{
-				return input.nextInt();
+				return Console.in().nextInt();
 			}
 			else
 			{
-				input.next();
+				Console.in().next();
 				System.out.println("Error:  Invalid input (non-integer) detected!");
 			}
 		} while (true);
@@ -141,19 +140,18 @@ public class NumericalMenu
 	public static double getDoubleInput(String prompt)
 	{
 		if(prompt == null) throw new NullPointerException("Prompt may not be null!");
-		Scanner input = new Scanner(System.in);
 
 		do
 		{
 			System.out.print(prompt);
 			
-			if(input.hasNextDouble())
+			if(Console.in().hasNextDouble())
 			{
-				return input.nextDouble();
+				return Console.in().nextDouble();
 			}
 			else
 			{
-				input.next();
+				Console.in().next();
 				System.out.println("Error:  Invalid input (non-numerical type) detected!");
 			}
 		} while (true);
@@ -166,13 +164,11 @@ public class NumericalMenu
 	 */
 	public static boolean getYesOrNo(String prompt)
 	{
-		Scanner input = new Scanner(System.in);
-		
 		do
 		{
 			System.out.print(prompt);
 			
-			String str = input.next();
+			String str = Console.in().next();
 		
 			char c = str.charAt(0);
 			

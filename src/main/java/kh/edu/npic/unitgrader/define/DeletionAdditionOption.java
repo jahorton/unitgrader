@@ -3,6 +3,7 @@ package kh.edu.npic.unitgrader.define;
 import java.io.File;
 import java.util.Scanner;
 
+import kh.edu.npic.unitgrader.util.console.Console;
 import kh.edu.npic.unitgrader.util.console.Option;
 
 public class DeletionAdditionOption extends Option
@@ -18,8 +19,7 @@ public class DeletionAdditionOption extends Option
 	{
 		System.out.print("What should the path of the file be, relative to the student's base submission directory?  ");
 		
-		Scanner input = new Scanner(System.in);
-		String filename = input.nextLine();
+		String filename = Console.in().nextLine();
 		
 		if(filename == null) return true;
 		
