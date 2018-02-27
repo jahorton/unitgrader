@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.zeroturnaround.zip.ZipUtil;
 
 import kh.edu.npic.unitgrader.grade.manager.CanvasAssignmentManager;
 import kh.edu.npic.unitgrader.grade.manager.CanvasAssignmentManager.CanvasData;
@@ -20,7 +21,7 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 public class Test_StudentTester {
 	// Make sure the paths are fully resolved as absolute - this is necessary for the child process to do its thing.
 	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/submissions.zip").getAbsoluteFile();
-	public static final File SUBMISSIONS_BASE_DIRECTORY = new File("samples/1/submissions").getAbsoluteFile();
+	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/submissions").getAbsoluteFile();
 	public static final File TEST_SPEC_FILE = new File("samples/1/AssignmentGrader.test").getAbsoluteFile();
 	public static final File TEST_BASE_DIRECTORY = new File("samples/1").getAbsoluteFile();
 	
@@ -28,8 +29,15 @@ public class Test_StudentTester {
 	
 	@Before
 	public void setup() {	
-		// TODO:  Auto-extract the submissions archive into a nice, isolated 'test' location,
-		//        rather than relying on an end-user to extract it for us.
+		try 
+		{
+			ZipUtil.unpack(SUBMISSIONS_ARCHIVE, SUBMISSIONS_BASE_DIRECTORY);
+		} 
+		catch (Exception e) 
+		{
+			fail("Could not unzip the submissions archive file.");
+		}
+		
 		try
 		{
 			DirectoryManager.baseSubmissionSelectedDirectory = SUBMISSIONS_BASE_DIRECTORY;
@@ -59,5 +67,4 @@ public class Test_StudentTester {
 			assertEquals(0, results.get(tc).crashes.size());
 		}
 	}
-
 }

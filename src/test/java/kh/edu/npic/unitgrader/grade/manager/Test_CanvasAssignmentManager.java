@@ -6,23 +6,31 @@ import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.zeroturnaround.zip.ZipUtil;
 
 import kh.edu.npic.unitgrader.util.Serialization;
 import kh.edu.npic.unitgrader.util.TestSpecification;
 import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class Test_CanvasAssignmentManager {
-	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/submissions.zip");
-	public static final File SUBMISSIONS_BASE_DIRECTORY = new File("samples/1/submissions");
-	public static final File TEST_SPEC_FILE = new File("samples/1/AssignmentGrader.test");
-	public static final File TEST_BASE_DIRECTORY = new File("samples/1/bin");
+	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/submissions.zip").getAbsoluteFile();
+	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/submissions").getAbsoluteFile();
+	public static final File TEST_SPEC_FILE = new File("samples/1/AssignmentGrader.test").getAbsoluteFile();
+	public static final File TEST_BASE_DIRECTORY = new File("samples/1").getAbsoluteFile();
 	
 	private static TestSpecification TEST_SPEC;
 	
 	@Before
 	public void setup() {	
-		// TODO:  Auto-extract the submissions archive into a nice, isolated 'test' location,
-		//        rather than relying on an end-user to extract it for us.
+		try 
+		{
+			ZipUtil.unpack(SUBMISSIONS_ARCHIVE, SUBMISSIONS_BASE_DIRECTORY);
+		} 
+		catch (Exception e) 
+		{
+			fail("Could not unzip the submissions archive file.");
+		}
+		
 		try
 		{
 			DirectoryManager.baseSubmissionSelectedDirectory = SUBMISSIONS_BASE_DIRECTORY;
@@ -30,7 +38,6 @@ public class Test_CanvasAssignmentManager {
 		}
 		catch(ClassCastException e)
 		{
-			System.err.println("Test file does not contain a proper test definition!");
 			fail("Could not load the test specification file!");
 		}
 	}
