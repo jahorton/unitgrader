@@ -33,9 +33,9 @@ public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.
 	// Class properties
 	protected Map<String, StudentData<TagType>> idDataMap;
 	protected SortedSet<StudentData<TagType>> sortedEntries;
+	protected SavedResults<TagType> results;
 	
-	protected SavedResults<TagType> results;	
-	protected File resultsFile;
+	private File resultsFile;
 	
 	private final String managerName;
 	
@@ -66,7 +66,7 @@ public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.
 	
 	// Abstract methods.
 	
-	// Used for initialization.
+	// Used for initialization.  Performs base folder analysis and builds the list of student submissions.
 	protected abstract void init();
 	
 	// Cleans the build folder, etc for a given student, restoring it to match the original submission.
