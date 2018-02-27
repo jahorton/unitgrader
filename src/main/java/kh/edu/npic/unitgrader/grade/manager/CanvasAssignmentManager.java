@@ -1,10 +1,7 @@
 package kh.edu.npic.unitgrader.grade.manager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -14,15 +11,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.zeroturnaround.zip.ZipUtil;
@@ -32,7 +24,7 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
 import kh.edu.npic.unitgrader.util.filefilter.ZipFilter;
 import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
-public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssignmentManager.CanvasData>
+public class CanvasAssignmentManager extends LMSAssignmentManager<CanvasAssignmentManager.CanvasData>
 {	
 	public class CanvasData implements LMSAssignmentManager.LMSDataTag
 	{
@@ -51,35 +43,19 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 	
 	//private final File baseDirectory;
     // ID
-	private SavedResults<CanvasData> results;
-
-	private Map<String, StudentData<CanvasData>> idDataMap;
-	private SortedSet<StudentData<CanvasData>> sortedEntries;
 	private Map<String, File> zipMap;
-	
-	private File resultsFile;
 
 	public CanvasAssignmentManager(File existingResultsFile, SavedResults<CanvasData> existingResults)
 	{
-		results = existingResults;
-			
-		//baseDirectory = existingResultsFile.getParentFile();
-		resultsFile = existingResultsFile;
-		
-		init();
+		super("Canvas", existingResultsFile, existingResults);
 	}
 	
 	public CanvasAssignmentManager(File baseDirectory, TestSpecification testCase, File testDirectory)
 	{
-		//this.baseDirectory = baseDirectory;
-		this.resultsFile = new File(baseDirectory, SavedResults.DATA_FILENAME);
-		
-		results = new SavedResults<CanvasData>(testCase, testDirectory);
-		
-		init();
+		super("Canvas", baseDirectory, testCase, testDirectory);
 	}
 	
-	private void init()
+	protected void init()
 	{
 		// Load all data existing in the submission directory?
 		File[] fileArray = DirectoryManager.baseSubmissionSelectedDirectory.listFiles(new ZipFilter());
@@ -196,25 +172,7 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 			zipMap.remove(id);
 		}
 		
-		Comparator<StudentData<CanvasData>> comparer = new Comparator<StudentData<CanvasData>>()
-		{
-
-			@Override
-			public int compare(StudentData<CanvasData> o1, StudentData<CanvasData> o2)
-			{
-				int res = o1.last.compareTo(o2.last);
-				
-				if(res != 0) return res;
-				
-				res = o1.first.compareTo(o2.first);
-				
-				if(res != 0) return res;
-				
-				return o1.id.compareTo(o2.id);
-			}
-		};
-		
-		sortedEntries = new TreeSet<StudentData<CanvasData>>(comparer);
+		sortedEntries = new TreeSet<StudentData<CanvasData>>(new LMSAssignmentManager.StudentDataComparator<CanvasData>());
 		sortedEntries.addAll(results.priorData.values());
 	}
 	
@@ -222,101 +180,27 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 	{
 		return last + ", " + first + " CanvasID " + id;
 	}
-	
-	public Map<String, StudentData<CanvasData>> getStudentIDMap()
-	{
-		return Collections.unmodifiableMap(idDataMap);
-	}
-	
-	public Iterator<StudentData<CanvasData>> iterator()
-	{
-		return sortedEntries.iterator();
-	}
 
-
+	// Defines a default (null) set of directories to create on comment export.
 	@Override
-	public void save()
+	protected List<File> getCommentExportDirectories() 
 	{
-		results.save(resultsFile);
+		List<File> commentDirs = new ArrayList<File>(1);
+		commentDirs.add(new File(DirectoryManager.baseSubmissionSelectedDirectory, "Comments"));
+		return commentDirs;
 	}
 	
-	public TestSpecification getTestSpecification()
-	{
-		return results.testSpec;
-	}
-
 	@Override
-	public void exportComments()
+	protected List<File> getCommentExportFileList(StudentData<CanvasData> data)
 	{
-		File commentDirectory = new File(DirectoryManager.baseSubmissionSelectedDirectory, "Comments");
-		commentDirectory.mkdir();
+		File commentDirectory = this.getCommentExportDirectories().get(0);
 		
-		// Love that I can write this.
-		for(StudentData<CanvasData> data:this)
-		{
-			String comment = data.getComments();
-			
-			if(comment == null) continue;
-			
-			File destFile = new File(new File(DirectoryManager.baseSubmissionSelectedDirectory, data.getBaseFolder().toString()), "comments.txt");
-			File destFile2 = new File(commentDirectory, data.first + " " + data.last + " comments.txt");
-			
-			PrintWriter out = null;
-			try
-			{
-				out = new PrintWriter(new FileOutputStream(destFile));
-				out.write(comment);
-			}
-			catch (FileNotFoundException e)
-			{
-				System.err.println("Error attempting to export comments for student " + data.first + " " + data.last);
-			}
-			finally
-			{
-				if(out != null)
-					out.close();
-			}
-			
-			try
-			{
-				out = new PrintWriter(new FileOutputStream(destFile2));
-				out.write(comment);
-			}
-			catch (FileNotFoundException e)
-			{
-				System.err.println("Error attempting to export comments for student " + data.first + " " + data.last);
-			}
-			finally
-			{
-				if(out != null)
-					out.close();
-			}
-		}
+		List<File> files = new ArrayList<File>(2);
+		files.add(new File(new File(DirectoryManager.baseSubmissionSelectedDirectory, data.getBaseFolder().toString()), "comments.txt"));
+		files.add(new File(commentDirectory, data.first + " " + data.last + " comments.txt"));
+		return files;
 	}
 	
-	public StudentFolderStatus isStudentFolderPresent(StudentData<CanvasData> data)
-	{
-		StudentData<CanvasData> folderData = idDataMap.get(data.id);
-		
-		if(folderData == null) return StudentFolderStatus.MISSING;
-		if(folderData.getTimestamp() == 0) return StudentFolderStatus.MISSING;
-		
-		long compResult = data.getTimestamp() - folderData.getTimestamp();
-		
-		if(compResult < 0)
-		{
-			return StudentFolderStatus.NEW;
-		}
-		else if(compResult > 0)
-		{
-			return StudentFolderStatus.OLD;
-		}
-		else 
-		{
-			return StudentFolderStatus.CURRENT;
-		}
-	}
-
 	@Override
 	public boolean resetStudentFolder(StudentData<CanvasData> data)
 	{
@@ -359,68 +243,7 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 		
 		return true;
 	}
-
-	@Override
-	public boolean mergeResults(SavedResults<CanvasData> setToMerge)
-	{
-		boolean success = this.results.merge(setToMerge);
-
-		if(success)
-			this.save();
-		
-		return success;
-	}
-
-	@Override
-	public void setTestDirectory(File testDir)
-	{
-		results.setTestDirectory(testDir);
-	}
 	
-	@Override
-	public List<StudentData<CanvasData>> matchLastname(String str)
-	{
-		str = str.toLowerCase();
-		
-		LinkedList<StudentData<CanvasData>> matches = new LinkedList<StudentData<CanvasData>>();
-		
-		for(StudentData<CanvasData> data:results.priorData.values())
-		{
-			if(data.last.toLowerCase().contains(str))
-				matches.add(data);
-		}
-		
-		return matches;
-	}
-
-	@Override
-	public List<StudentData<CanvasData>> matchFirstname(String str)
-	{
-		str = str.toLowerCase();
-		
-		LinkedList<StudentData<CanvasData>> matches = new LinkedList<StudentData<CanvasData>>();
-		
-		for(StudentData<CanvasData> data:results.priorData.values())
-		{
-			if(data.first.toLowerCase().contains(str))
-				matches.add(data);
-		}
-		
-		return matches;
-	}
-
-	@Override
-	public String getCSV_IDField()
-	{
-		return "ID";
-	}
-
-//	@Override
-//	public String getCSV_NameField()
-//	{
-//		return "Student";
-//	}
-
 	@Override
 	public Map<String, Integer> getCSV_DefaultHeader()
 	{
@@ -433,30 +256,6 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 		headerMap.put("Section", 4);
 		
 		return headerMap;
-	}
-	
-	@Override
-	public String getName()
-	{
-		return "Canvas";
-	}
-	
-	@Override
-	public long getLastExportTimestamp()
-	{
-		return results.getLastExportTimestamp();
-	}
-
-	@Override
-	public void markExportTimestamp()
-	{
-		results.markExportTimestamp();
-	}
-	
-	@Override
-	public StudentData<CanvasData> getStudentData(String id)
-	{
-		return idDataMap.get(id);
 	}
 	
 	@Override
