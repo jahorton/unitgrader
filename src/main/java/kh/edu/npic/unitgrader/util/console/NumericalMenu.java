@@ -32,6 +32,11 @@ public class NumericalMenu
 		return options.size();
 	}
 	
+	void runOptionAtIndex(int index)
+	{
+		options.get(index).function();
+	}
+	
 	public Option remove(int index)
 	{
 		return options.remove(index);
@@ -89,33 +94,6 @@ public class NumericalMenu
 		
 		recentMenuEnd = true;
 	}
-	
-//	static boolean consoleClearFailure = false;
-//	
-//	public final static void clearConsole()
-//	{
-//	    try
-//	    {
-//	        final String os = System.getProperty("os.name");
-//
-//	        if (os.contains("Windows"))
-//	        {
-//	            Runtime.getRuntime().exec("cls");
-//	        }
-//	        else
-//	        {
-//	            Runtime.getRuntime().exec("clear");
-//	        }
-//	    }
-//	    catch (final Exception e)
-//	    {
-//	    	if(!consoleClearFailure)
-//	    	{
-//	    		consoleClearFailure = true;
-//	    		System.err.println("Unable to clear the console!");
-//	    	}
-//	    }
-//	}
 	
 	public static int getIntInput(String prompt)
 	{
