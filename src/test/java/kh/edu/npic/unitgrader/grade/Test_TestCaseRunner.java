@@ -33,12 +33,12 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class Test_TestCaseRunner {
 	// Make sure the paths are fully resolved as absolute - this is necessary for the child process to do its thing.
-	public static final File TEST_BASE_DIRECTORY_ORIGIN = new File("samples/1").getAbsoluteFile();
-	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/submissions.zip").getAbsoluteFile();
-	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/tcr/submissions").getAbsoluteFile();
+	public static final File TEST_BASE_DIRECTORY_ORIGIN = new File("samples/1/canvas").getAbsoluteFile();
+	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/canvas/submissions.zip").getAbsoluteFile();
+	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/tcr/canvas/submissions").getAbsoluteFile();
 	
-	public static final File TCR_WORKING_PATH = new File(".testing/tcr/submissions/student, test CanvasID 899100").getAbsoluteFile();
-	public static final File TEST_SPEC_FILE = new File("samples/1/AssignmentGrader.test").getAbsoluteFile();;
+	public static final File TCR_WORKING_PATH = new File(SUBMISSIONS_BASE_DIRECTORY, "student, test CanvasID 899100").getAbsoluteFile();
+	public static final File TEST_SPEC_FILE = new File(TEST_BASE_DIRECTORY_ORIGIN, "AssignmentGrader.test").getAbsoluteFile();;
 	
 	private static TestSpecification TEST_SPEC;
 	
@@ -46,7 +46,7 @@ public class Test_TestCaseRunner {
 	// Copies the test files over for a special, in-process run of TestCaseRunner's main in order to ensure its validity.
 	public void copyClassFiles() throws IOException
 	{
-		File testBin = new File(TEST_BASE_DIRECTORY_ORIGIN, "bin");
+		File testBin = new File(TEST_BASE_DIRECTORY_ORIGIN, "../bin");
 		File[] testResources = testBin.listFiles(new JavaClassFileFilter());
 		
 		for(File test: testResources)
@@ -147,7 +147,7 @@ public class Test_TestCaseRunner {
 	}
 
 	@Test
-	public void testMain() throws IOException {
+	public void main_flawless() throws IOException {
 		compileSources(TCR_WORKING_PATH);
 		
 		String testName = TEST_SPEC.testCases.get(0).getTestCaseFile().getName();

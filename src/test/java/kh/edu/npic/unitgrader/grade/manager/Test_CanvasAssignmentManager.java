@@ -13,15 +13,15 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
 import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class Test_CanvasAssignmentManager {
-	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/submissions.zip").getAbsoluteFile();
-	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/submissions").getAbsoluteFile();
-	public static final File TEST_SPEC_FILE = new File("samples/1/AssignmentGrader.test").getAbsoluteFile();
-	public static final File TEST_BASE_DIRECTORY = new File("samples/1").getAbsoluteFile();
+	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/canvas/submissions.zip").getAbsoluteFile();
+	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/canvas/submissions").getAbsoluteFile();
+	public static final File TEST_SPEC_FILE = new File("samples/1/canvas/AssignmentGrader.test").getAbsoluteFile();
+	public static final File TEST_BASE_DIRECTORY = new File("samples/1/canvas").getAbsoluteFile();
 	
 	private static TestSpecification TEST_SPEC;
 	
 	@Before
-	public void setup() {	
+	public void setup() {
 		try 
 		{
 			ZipUtil.unpack(SUBMISSIONS_ARCHIVE, SUBMISSIONS_BASE_DIRECTORY);
