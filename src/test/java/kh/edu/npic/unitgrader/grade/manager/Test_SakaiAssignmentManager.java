@@ -8,16 +8,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.zeroturnaround.zip.ZipUtil;
 
-import kh.edu.npic.unitgrader.grade.manager.CanvasAssignmentManager.CanvasData;
+import kh.edu.npic.unitgrader.grade.manager.SakaiAssignmentManager.SakaiData;
 import kh.edu.npic.unitgrader.util.Serialization;
 import kh.edu.npic.unitgrader.util.TestSpecification;
 import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
-public class Test_CanvasAssignmentManager {
-	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/canvas/submissions.zip").getAbsoluteFile();
-	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/canvas/submissions").getAbsoluteFile();
-	public static final File TEST_SPEC_FILE = new File("samples/1/canvas/AssignmentGrader.test").getAbsoluteFile();
-	public static final File TEST_BASE_DIRECTORY = new File("samples/1/canvas").getAbsoluteFile();
+public class Test_SakaiAssignmentManager {
+	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/sakai/submissions.zip").getAbsoluteFile();
+	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/1/sakai/submissions").getAbsoluteFile();
+	public static final File TEST_SPEC_FILE = new File("samples/1/sakai/AssignmentGrader.test").getAbsoluteFile();
+	public static final File TEST_BASE_DIRECTORY = new File("samples/1/sakai").getAbsoluteFile();
 	
 	private static TestSpecification TEST_SPEC;
 	
@@ -46,16 +46,16 @@ public class Test_CanvasAssignmentManager {
 	// Ensure that our Canvas-based sample can load properly.
 	@Test
 	public void init() {
-		CanvasAssignmentManager manager = new CanvasAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
+		SakaiAssignmentManager manager = new SakaiAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
 		
 		assertEquals(2, manager.getStudentIDMap().size());
 		assertNotNull(manager.getStudentData("899100"));
 		assertEquals(1, manager.matchFirstname("secondtest").size());
 		assertEquals(2, manager.matchLastname("student").size());
 		
-		StudentData<CanvasData> student = manager.getStudentData("899100");
+		StudentData<SakaiData> student = manager.getStudentData("899100");
 		File studentPath = student.getCodeFolder();
-		assertEquals(new File("student, test CanvasID 899100"), studentPath);
+		assertEquals(new File("student, test (899100)" + File.separator + "files"), studentPath);
 	}
 
 }

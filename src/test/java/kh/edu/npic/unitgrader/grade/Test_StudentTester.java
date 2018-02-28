@@ -67,4 +67,17 @@ public class Test_StudentTester {
 			assertEquals(0, results.get(tc).crashes.size());
 		}
 	}
+	
+	@Test
+	public void run_average() throws TestingException {
+		CanvasAssignmentManager manager = new CanvasAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
+		StudentData<CanvasData> studentData = manager.getStudentData("899101");
+		
+		Map<TestCase, TestResult> results = StudentTester.run(TEST_SPEC, studentData);
+		assertNotNull(results);
+		assertFalse(results.isEmpty());
+		
+		assertEquals(1, results.get(TEST_SPEC.testCases.get(1)).crashes.size());
+		assertEquals(3, results.get(TEST_SPEC.testCases.get(2)).crashes.size());
+	}
 }
