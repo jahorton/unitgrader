@@ -48,10 +48,10 @@ public class Test_CanvasAssignmentManager {
 	public void init() {
 		CanvasAssignmentManager manager = new CanvasAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
 		
-		assertEquals(2, manager.getStudentIDMap().size());
+		assertEquals(3, manager.getStudentIDMap().size());
 		assertNotNull(manager.getStudentData("899100"));
 		assertEquals(1, manager.matchFirstname("secondtest").size());
-		assertEquals(2, manager.matchLastname("student").size());
+		assertEquals(3, manager.matchLastname("student").size());
 		
 		StudentData<CanvasData> student = manager.getStudentData("899100");
 		File studentPath = student.getCodeFolder();

@@ -48,10 +48,10 @@ public class Test_SakaiAssignmentManager {
 	public void init() {
 		SakaiAssignmentManager manager = new SakaiAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
 		
-		assertEquals(2, manager.getStudentIDMap().size());
+		assertEquals(3, manager.getStudentIDMap().size());
 		assertNotNull(manager.getStudentData("899100"));
 		assertEquals(1, manager.matchFirstname("secondtest").size());
-		assertEquals(2, manager.matchLastname("student").size());
+		assertEquals(3, manager.matchLastname("student").size());
 		
 		StudentData<SakaiData> student = manager.getStudentData("899100");
 		File studentPath = student.getCodeFolder();
