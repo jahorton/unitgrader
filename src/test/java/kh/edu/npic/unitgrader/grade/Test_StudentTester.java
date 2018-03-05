@@ -77,8 +77,8 @@ public class Test_StudentTester {
 		assertNotNull(results);
 		assertFalse(results.isEmpty());
 		
-		assertEquals(1, results.get(TEST_SPEC.testCases.get(1)).crashes.size());
-		assertEquals(3, results.get(TEST_SPEC.testCases.get(2)).crashes.size());
+		assertEquals(1, results.get(TEST_SPEC.testCases.get(1)).failures.size());
+		assertEquals(3, results.get(TEST_SPEC.testCases.get(2)).failures.size());
 	}
 	
 	@Test

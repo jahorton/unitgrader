@@ -37,7 +37,7 @@ public class Test_TestCaseRunner {
 	public static final File SUBMISSIONS_ARCHIVE = new File("samples/1/canvas/submissions.zip").getAbsoluteFile();
 	public static final File SUBMISSIONS_BASE_DIRECTORY = new File(".testing/tcr/canvas/submissions").getAbsoluteFile();
 	
-	public static final File TCR_WORKING_PATH = new File(SUBMISSIONS_BASE_DIRECTORY, "student, test CanvasID 899100").getAbsoluteFile();
+	public static final File TCR_WORKING_PATH = new File(SUBMISSIONS_BASE_DIRECTORY, "student, secondtest CanvasID 899101").getAbsoluteFile();
 	public static final File TEST_SPEC_FILE = new File(TEST_BASE_DIRECTORY_ORIGIN, "AssignmentGrader.test").getAbsoluteFile();;
 	
 	private static TestSpecification TEST_SPEC;
@@ -104,7 +104,7 @@ public class Test_TestCaseRunner {
 		
 		// We don't want to actually use the manager; instead, we're relying on it to pre-extract the submission for us.
 		CanvasAssignmentManager manager = new CanvasAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY_ORIGIN);
-		assertNotNull(manager.getStudentData("899100"));
+		assertNotNull(manager.getStudentData("899101"));
 		
 		// Copy the test resources into the folder!
 		copyClassFiles();
@@ -150,7 +150,7 @@ public class Test_TestCaseRunner {
 	public void main_flawless() throws IOException {
 		compileSources(TCR_WORKING_PATH);
 		
-		String testName = TEST_SPEC.testCases.get(0).getTestCaseFile().getName();
+		String testName = TEST_SPEC.testCases.get(1).getTestCaseFile().getName();
 		// Because we didn't set the classpath, we must directly load the Assignment class ourselves! 
 		ManualClassLoader.loadClassFromFile(new File(TCR_WORKING_PATH, "Assignment.class"));
 		
@@ -183,7 +183,7 @@ public class Test_TestCaseRunner {
 			TestResult result = (TestResult)Serialization.fromXML(output);
 			
 			assertEquals(0, result.crashes.size());
-			assertEquals(0, result.failures.size());
+			assertEquals(1, result.failures.size());
 		}
 	}
 
