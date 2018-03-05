@@ -80,4 +80,16 @@ public class Test_StudentTester {
 		assertEquals(1, results.get(TEST_SPEC.testCases.get(1)).crashes.size());
 		assertEquals(3, results.get(TEST_SPEC.testCases.get(2)).crashes.size());
 	}
+	
+	@Test
+	public void run_compile_error() throws TestingException {
+		CanvasAssignmentManager manager = new CanvasAssignmentManager(SUBMISSIONS_BASE_DIRECTORY, TEST_SPEC, TEST_BASE_DIRECTORY);
+		StudentData<CanvasData> studentData = manager.getStudentData("899102");
+		
+		Map<TestCase, TestResult> results = StudentTester.run(TEST_SPEC, studentData);
+		assertNull(results);
+		String compileErr = StudentTester.getLastCompileDiagnostics();
+		assertNotNull(compileErr);
+		assertTrue(compileErr.contains("error: class, interface, or enum expected"));
+	}
 }
