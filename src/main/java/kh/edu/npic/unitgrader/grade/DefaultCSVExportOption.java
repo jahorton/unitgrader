@@ -12,9 +12,9 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class DefaultCSVExportOption extends Option
 {
-	private LMSAssignmentManager manager;
+	private LMSAssignmentManager<?> manager;
 
-	public DefaultCSVExportOption(LMSAssignmentManager manager)
+	public DefaultCSVExportOption(LMSAssignmentManager<?> manager)
 	{
 		super("Write the results to a generic *.csv file, importable to Excel.");
 		

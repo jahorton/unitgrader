@@ -13,6 +13,7 @@ import kh.edu.npic.unitgrader.grade.AutogradeResults;
 import kh.edu.npic.unitgrader.grade.GradingEngine;
 import kh.edu.npic.unitgrader.grade.manager.CanvasAssignmentManager;
 import kh.edu.npic.unitgrader.grade.manager.LMSAssignmentManager;
+import kh.edu.npic.unitgrader.grade.manager.LMSAssignmentManager.LMSDataTag;
 import kh.edu.npic.unitgrader.grade.manager.StudentData;
 import kh.edu.npic.unitgrader.grade.manager.StudentFolderStatus;
 import kh.edu.npic.unitgrader.util.DirectoryRestrictedFileSystemView;
@@ -51,7 +52,7 @@ public class AutogradeDriver
 		menu.run();	    
 	}
 	
-	public static void studentNoncompileMenu(final StudentData data, final LMSAssignmentManager manager)
+	public static <T extends LMSDataTag> void studentNoncompileMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager)
 	{
 		System.out.println();
 		System.out.println("Testing attempt failed; cannot continue grading this submission as it is.");
@@ -206,7 +207,7 @@ public class AutogradeDriver
 		menu.run();
 	}
 	
-	public static void studentGradingMenu(final StudentData data, final LMSAssignmentManager manager, final AutogradeResults gradingResults)
+	public static <T extends LMSDataTag> void studentGradingMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager, final AutogradeResults gradingResults)
 	{
 		System.out.println();
 		System.out.println("Suggested score for " + data.first + "  " + data.last + ": " + gradingResults.grade);
@@ -493,9 +494,9 @@ public class AutogradeDriver
 	
 	private static class RebaseOption extends Option
 	{
-		private final StudentData data;
+		private final StudentData<?> data;
 
-		public RebaseOption(StudentData data)
+		public RebaseOption(StudentData<?> data)
 		{
 			super("Search the submission for the directory with this student's submitted code.");
 			
@@ -538,14 +539,11 @@ public class AutogradeDriver
 	
 	private static class OpenOption extends Option
 	{
-		public final String text;
-		
 		private File fileToLaunch;
 		
 		public OpenOption(String text, File file)
 		{
 			super(text);
-			this.text = text;
 			this.fileToLaunch = file;
 		}
 		

@@ -2,8 +2,6 @@ package kh.edu.npic.unitgrader.util;
 
 import java.io.File;
 
-import kh.edu.npic.unitgrader.util.filefilter.*;
-
 public final class Classpaths 
 {
 	private Classpaths() 

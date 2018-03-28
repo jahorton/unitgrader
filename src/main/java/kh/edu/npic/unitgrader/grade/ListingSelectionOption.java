@@ -15,9 +15,9 @@ import kh.edu.npic.unitgrader.util.console.Option;
 
 public class ListingSelectionOption extends Option
 {
-	private LMSAssignmentManager manager;
+	private LMSAssignmentManager<?> manager;
 
-	public ListingSelectionOption(LMSAssignmentManager manager)
+	public ListingSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("List all students based on selected criteria.");
 		
@@ -30,10 +30,10 @@ public class ListingSelectionOption extends Option
 	    class FilterListingOption extends Option
 	    {
 	    	StudentConditionFilter filter;
-	    	LMSAssignmentManager manager;
+	    	LMSAssignmentManager<?> manager;
 	    	String filterExplanation;
 	    	
-			public FilterListingOption(String text, StudentConditionFilter filter, LMSAssignmentManager manager, String filterExplanation)
+			public FilterListingOption(String text, StudentConditionFilter filter, LMSAssignmentManager<?> manager, String filterExplanation)
 			{
 				super(text);
 

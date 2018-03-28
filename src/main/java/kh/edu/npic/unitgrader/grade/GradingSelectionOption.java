@@ -15,9 +15,9 @@ import kh.edu.npic.unitgrader.util.console.Option;
 
 public class GradingSelectionOption extends Option
 {
-	private LMSAssignmentManager manager;
+	private LMSAssignmentManager<?> manager;
 
-	public GradingSelectionOption(LMSAssignmentManager manager)
+	public GradingSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("Grade/regrade assignments.");
 		
@@ -30,9 +30,9 @@ public class GradingSelectionOption extends Option
 	    class FilterGradingOption extends Option
 	    {
 	    	StudentConditionFilter filter;
-	    	LMSAssignmentManager manager;
+	    	LMSAssignmentManager<?> manager;
 	    	
-			public FilterGradingOption(String text, StudentConditionFilter filter, LMSAssignmentManager manager)
+			public FilterGradingOption(String text, StudentConditionFilter filter, LMSAssignmentManager<?> manager)
 			{
 				super(text);
 

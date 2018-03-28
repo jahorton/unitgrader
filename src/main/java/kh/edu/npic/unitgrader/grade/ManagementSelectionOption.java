@@ -16,9 +16,9 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class ManagementSelectionOption extends Option
 {
-	private final LMSAssignmentManager manager;
+	private final LMSAssignmentManager<?> manager;
 	
-	public ManagementSelectionOption(LMSAssignmentManager manager)
+	public ManagementSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("Manage loaded grading results.");
 		
@@ -76,7 +76,7 @@ public class ManagementSelectionOption extends Option
 			    		return false;
 			    }
 				
-			    SavedResults result;
+			    SavedResults<?> result;
 			    try
 				{
 					result = SavedResults.load(chooseTest.getSelectedFile());
@@ -87,11 +87,15 @@ public class ManagementSelectionOption extends Option
 					return false;
 				}
 				
-			    if(manager.mergeResults(result))
-			    {
-			    	System.out.println("Merge successful.");
+			    boolean mergeSuccess = false;
+			    if(manager.getName().equals(result.testSpec.getLMSIdentifier())) {
+				    if(manager.mergeResults((SavedResults)result))
+				    {
+				    	System.out.println("Merge successful.");
+				    }
 			    }
-			    else
+
+			    if(!mergeSuccess)
 			    {
 			    	System.out.println("Requested merge could not be performed.");
 			    }
