@@ -1,4 +1,5 @@
 .gradle
+.testing
 build/
 bin/
 samples/**/submissions/

@@ -3,18 +3,12 @@ package kh.edu.npic.unitgrader.grade.manager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.zeroturnaround.zip.ZipUtil;
@@ -30,7 +24,7 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 //            GMT TIME.
 //            hr mn
 
-public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignmentManager.SakaiData>
+public class SakaiAssignmentManager extends LMSAssignmentManager<SakaiAssignmentManager.SakaiData>
 {
 	public class SakaiData implements LMSAssignmentManager.LMSDataTag<SakaiData>
 	{
@@ -47,33 +41,18 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 	
 	//private final File baseDirectory;  // No longer used; this is replaced by the DirectoryManager.
 	            // ID
-	private SavedResults<SakaiData> results;
-	private Map<String, StudentData<SakaiData>> idDataMap;
-	private SortedSet<StudentData<SakaiData>> sortedEntries;
-	
-	private File resultsFile;
 	
 	public SakaiAssignmentManager(File existingResultsFile, SavedResults<SakaiData> existingResults)
 	{
-		results = existingResults;
-			
-		//baseDirectory = existingResultsFile.getParentFile();
-		resultsFile = existingResultsFile;
-		
-		init();
+		super("Sakai", existingResultsFile, existingResults);
 	}
 	
 	public SakaiAssignmentManager(File baseDirectory, TestSpecification testCase, File testDirectory)
 	{
-		//this.baseDirectory = baseDirectory;
-		this.resultsFile = new File(baseDirectory, SavedResults.DATA_FILENAME);
-		
-		results = new SavedResults<SakaiData>(testCase, testDirectory);
-		
-		init();
+		super("Sakai", baseDirectory, testCase, testDirectory);
 	}
 	
-	private void init()
+	protected void init()
 	{
 		// Load all data existing in the submission directory?
 		File[] fileArray = DirectoryManager.baseSubmissionSelectedDirectory.listFiles(new DirectoryFilter());
@@ -129,21 +108,7 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 			}
 		}
 		
-		Comparator<StudentData<SakaiData>> comparer = new Comparator<StudentData<SakaiData>>()
-		{
-
-			@Override
-			public int compare(StudentData<SakaiData> o1, StudentData<SakaiData> o2)
-			{
-				int res = o1.last.compareTo(o2.last);
-				
-				if(res != 0) return res;
-				
-				return o1.first.compareTo(o2.first);
-			}
-		};
-		
-		sortedEntries = new TreeSet<StudentData<SakaiData>>(comparer);
+		sortedEntries = new TreeSet<StudentData<SakaiData>>(new LMSAssignmentManager.StudentDataComparator<SakaiData>());
 		sortedEntries.addAll(results.priorData.values());
 	}
 	
@@ -183,85 +148,21 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 		
 		// Open the file, read its contents.
 		Scanner input = new Scanner(new FileInputStream(files[0]));
-		long stamp = input.nextLong(); // Is the only line in the file.
+		
+		long val = input.nextLong(); // Is the only line in the file.
 		input.close();
 		
-		return stamp;
-	}
-	
-	public Map<String, StudentData<SakaiData>> getStudentIDMap()
-	{
-		return Collections.unmodifiableMap(idDataMap);
-	}
-	
-	public Iterator<StudentData<SakaiData>> iterator()
-	{
-		return sortedEntries.iterator();
+		return val;
 	}
 
 	@Override
-	public void save()
+	protected List<File> getCommentExportFileList(StudentData<SakaiData> data)
 	{
-		results.save(resultsFile);
+		List<File> files = new ArrayList<File>(1);
+		files.add(new File(new File(DirectoryManager.baseSubmissionSelectedDirectory, data.getBaseFolder().toString()), ".." + File.separator + "comments.txt"));
+		return files;
 	}
 	
-	public TestSpecification getTestSpecification()
-	{
-		return results.testSpec;
-	}
-
-	public void exportComments()
-	{
-		// Love that I can write this.
-		for(StudentData<SakaiData> data:this)
-		{
-			String comment = data.getComments();
-			
-			if(comment == null) continue;
-			
-			File destFile = new File(new File(DirectoryManager.baseSubmissionSelectedDirectory, data.getBaseFolder().toString()), ".." + File.separator + "comments.txt");
-			
-			PrintWriter out = null;
-			try
-			{
-				out = new PrintWriter(new FileOutputStream(destFile));
-				out.write(comment);
-			}
-			catch (FileNotFoundException e)
-			{
-				System.err.println("Error attempting to export comments for student " + data.first + " " + data.last);
-			}
-			finally
-			{
-				if(out != null)
-					out.close();
-			}
-		}
-	}
-
-	@Override
-	public StudentFolderStatus isStudentFolderPresent(StudentData<SakaiData> data)
-	{
-		StudentData<SakaiData> folderData = idDataMap.get(data.id);
-		
-		if(folderData == null) return StudentFolderStatus.MISSING;
-		
-		long compResult = data.getTimestamp() - folderData.getTimestamp();
-		
-		if(compResult < 0)
-		{
-			return StudentFolderStatus.NEW;
-		}
-		else if(compResult > 0)
-		{
-			return StudentFolderStatus.OLD;
-		}
-		else 
-		{
-			return StudentFolderStatus.CURRENT;
-		}
-	}
-
 	@Override
 	public boolean resetStudentFolder(StudentData<SakaiData> data)
 	{
@@ -277,68 +178,6 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 	}
 
 	@Override
-	public boolean mergeResults(SavedResults<?> setToMerge)
-	{
-		boolean success = this.results.merge(setToMerge);
-
-		if(success)
-			this.save();
-		
-		return success;
-	}
-	
-
-	@Override
-	public void setTestDirectory(File testDir)
-	{
-		results.setTestDirectory(testDir);
-	}
-
-	@Override
-	public List<StudentData<SakaiData>> matchLastname(String str)
-	{
-		str = str.toLowerCase();
-		
-		LinkedList<StudentData<SakaiData>> matches = new LinkedList<StudentData<SakaiData>>();
-		
-		for(StudentData<SakaiData> data:results.priorData.values())
-		{
-			if(data.last.toLowerCase().contains(str))
-				matches.add(data);
-		}
-		
-		return matches;
-	}
-
-	@Override
-	public List<StudentData<SakaiData>> matchFirstname(String str)
-	{
-		str = str.toLowerCase();
-		
-		LinkedList<StudentData<SakaiData>> matches = new LinkedList<StudentData<SakaiData>>();
-		
-		for(StudentData<SakaiData> data:results.priorData.values())
-		{
-			if(data.first.toLowerCase().contains(str))
-				matches.add(data);
-		}
-		
-		return matches;
-	}
-
-	@Override
-	public String getCSV_IDField()
-	{
-		return "ID";
-	}
-
-//	@Override
-//	public String getCSV_NameField()
-//	{
-//		return "Student Name";
-//	}
-
-	@Override
 	public Map<String, Integer> getCSV_DefaultHeader()
 	{
 		//TODO:  Sakai full-auto-export note:  choose fieldname "grades" automatically!  And "grades.csv".
@@ -351,30 +190,6 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 		headerMap.put("First Name", 3);
 		
 		return headerMap;
-	}
-	
-	@Override
-	public String getName()
-	{
-		return "Sakai";
-	}
-
-	@Override
-	public long getLastExportTimestamp()
-	{
-		return results.getLastExportTimestamp();
-	}
-
-	@Override
-	public void markExportTimestamp()
-	{
-		results.markExportTimestamp();
-	}
-
-	@Override
-	public StudentData<SakaiData> getStudentData(String id)
-	{
-		return idDataMap.get(id);
 	}
 	
 	@Override
