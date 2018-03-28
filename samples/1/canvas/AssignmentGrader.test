@@ -1,7 +1,7 @@
 <testspec>
   <testCases>
     <tests>
-      <testCase>bin/Assignment_Verifier.class</testCase>
+      <testCase>../bin/Assignment_Verifier.class</testCase>
       <tests>
         <entry>
           <string>testConstructor_test</string>
@@ -47,7 +47,7 @@
       <compactComments>false</compactComments>
     </tests>
     <tests>
-      <testCase>bin/CreditCardGrader.class</testCase>
+      <testCase>../bin/CreditCardGrader.class</testCase>
       <tests>
         <entry>
           <string>debug_oddSumTest</string>
@@ -97,7 +97,7 @@
       <compactComments>false</compactComments>
     </tests>
     <tests>
-      <testCase>bin/StringPermutationGrader.class</testCase>
+      <testCase>../bin/StringPermutationGrader.class</testCase>
       <tests>
         <entry>
           <string>partialTest</string>

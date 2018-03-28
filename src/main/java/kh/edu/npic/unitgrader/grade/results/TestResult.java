@@ -16,7 +16,7 @@ public class TestResult
 		
 		for(org.junit.runner.notification.Failure f:src.getFailures())
 		{
-			if(f.getException() instanceof junit.framework.AssertionFailedError)
+			if(f.getException() instanceof java.lang.AssertionError)
 			{
 				failures.add(new Failure(f));
 			}

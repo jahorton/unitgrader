@@ -14,7 +14,7 @@ public class Failure extends FailureBase
 	{
 		super(src);
 		
-		if(!(src.getException() instanceof junit.framework.AssertionFailedError))
+		if(!(src.getException() instanceof java.lang.AssertionError))
 		{
 			throw new IllegalArgumentException("Failures must correspond to \"assert\" tests in JUnit test cases!");
 		}

@@ -2,6 +2,18 @@
 
 This sample serves to demonstrate an example setup for utilizing the UnitGrader for student assignments.
 
+## /canvas
+
+This folder shows an example setup for testing assignments from the Canvas LMS.
+
+## /sakai
+
+This folder shows the same example, but using the Sakai LMS format.
+
+# LMS Directory Structure
+
+All of the following may be found within both the /canvas and /sakai folders.
+
 ## /bin
 
 The /bin folder contains the JUnit test cases needed to assess student assignments.  If this folder does not
