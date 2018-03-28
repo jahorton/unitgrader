@@ -49,7 +49,7 @@ public interface LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDa
 	public void setTestDirectory(File testDir);
 	
 	// Allows the results of separate grading runs to be merged into a single results file.
-	public boolean mergeResults(SavedResults<TagType> setToMerge);
+	public boolean mergeResults(SavedResults<?> setToMerge);
 	
 	// Facilitate searching for specific students by name, instead of ID.
 	public List<StudentData<TagType>> matchLastname(String str);

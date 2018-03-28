@@ -81,6 +81,7 @@ public class TailoredExportOption extends Option
 			
 			reducedHeaderMap = manager.getCSV_DefaultHeader();
 			originalHeaderMap = parser.getHeaderMap();
+			parser.close();
 			
 			// Condition - if the CSV has a header that matches the standard style for its LMS.
 			if(!(originalHeaderMap.entrySet().containsAll(reducedHeaderMap.entrySet())))

@@ -89,7 +89,7 @@ public class ManagementSelectionOption extends Option
 				
 			    boolean mergeSuccess = false;
 			    if(manager.getName().equals(result.testSpec.getLMSIdentifier())) {
-				    if(manager.mergeResults((SavedResults)result))
+				    if(manager.mergeResults(result))
 				    {
 				    	System.out.println("Merge successful.");
 				    }

@@ -272,7 +272,7 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 	}
 
 	@Override
-	public boolean mergeResults(SavedResults<SakaiData> setToMerge)
+	public boolean mergeResults(SavedResults<?> setToMerge)
 	{
 		boolean success = this.results.merge(setToMerge);
 

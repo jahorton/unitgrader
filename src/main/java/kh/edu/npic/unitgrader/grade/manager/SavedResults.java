@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import kh.edu.npic.unitgrader.grade.manager.LMSAssignmentManager.LMSDataTag;
 import kh.edu.npic.unitgrader.util.Serialization;
 import kh.edu.npic.unitgrader.util.TestSpecification;
 
@@ -75,13 +76,15 @@ public class SavedResults<TagType extends LMSAssignmentManager.LMSDataTag<TagTyp
 		this.testDirectory = testDirectory;
 	}
 	
-	public boolean merge(SavedResults<TagType> other)
+	@SuppressWarnings("unchecked")
+	public <T extends LMSDataTag<T>> boolean merge(SavedResults<T> other)
 	{
 		//if(testDirectory.equals(other.testDirectory))  // The test directory won't match if sourced from diff comps.
 		
 		if(!testSpec.equals(other.testSpec)) return false; // Cannot merge - the results aren't from the same test spec.
+														   // Also ensures that the underlying AssignmentManager was of the same type.
 		
-		for(Map.Entry<String, StudentData<TagType>> entry:other.priorData.entrySet())
+		for(Map.Entry<String, StudentData<T>> entry:other.priorData.entrySet())
 		{
 			StudentData<TagType> curData = priorData.get(entry.getKey());
 			
@@ -90,7 +93,7 @@ public class SavedResults<TagType extends LMSAssignmentManager.LMSDataTag<TagTyp
 				if(curData.getTimestamp() >= entry.getValue().getTimestamp()) continue; // If the imported entry is older or of the same age, ignore it.
 			}
 			
-			priorData.put(entry.getKey(), entry.getValue());
+			priorData.put(entry.getKey(), (StudentData<TagType>)entry.getValue());
 		}
 		return true;
 	}

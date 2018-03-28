@@ -366,7 +366,7 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 	}
 
 	@Override
-	public boolean mergeResults(SavedResults<CanvasData> setToMerge)
+	public boolean mergeResults(SavedResults<?> setToMerge)
 	{
 		boolean success = this.results.merge(setToMerge);
 
