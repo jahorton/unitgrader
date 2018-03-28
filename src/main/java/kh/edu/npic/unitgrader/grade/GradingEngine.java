@@ -20,21 +20,21 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
 
 public class GradingEngine
 {
-	private static class TestingTask<TagType extends LMSAssignmentManager.LMSDataTag> implements Callable<Boolean>
+	private static class TestingTask<TagType extends LMSAssignmentManager.LMSDataTag<TagType>> implements Callable<Boolean>
 	{
 		StudentData<TagType> data;
-		LMSAssignmentManager<TagType> manager;
+		TestSpecification testSpec;
 		
-		public TestingTask(StudentData<TagType> data, LMSAssignmentManager<TagType> manager)
+		public TestingTask(StudentData<TagType> data, TestSpecification testSpec)
 		{
 			this.data = data;
-			this.manager = manager;
+			this.testSpec = testSpec;
 		}
 
 		@Override
 		public Boolean call() throws Exception
 		{
-			return GradingEngine.test(data, manager);
+			return GradingEngine.test(data, testSpec);
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class GradingEngine
 		return testSuccess;
 	}
 	
-	public static <T extends LMSAssignmentManager.LMSDataTag> void run(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> void run(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
 	{
 		TestSpecification testSpec = manager.getTestSpecification();
 		
@@ -141,7 +141,7 @@ public class GradingEngine
 				continue;
 			}
 			
-			status = manager.isStudentFolderPresent(nextData);
+			status = nextData.getFolderStatus();
 			if(nextData.getAnalysis() == null && (status == StudentFolderStatus.MISSING || status == StudentFolderStatus.OLD))
 			{
 				nextData = dataIter.next();
@@ -151,10 +151,10 @@ public class GradingEngine
 			break;
 		}
 		
-		status = manager.isStudentFolderPresent(nextData);
+		status = nextData.getFolderStatus();
 		if(status == StudentFolderStatus.NEW)
 		{
-			manager.resetStudentFolder(nextData);
+			nextData.resetFolder();
 		}
 		
 		AutogradeResults grading = null;	
@@ -162,8 +162,8 @@ public class GradingEngine
 		
 		if(nextData.getComments() == null) // This data hasn't been adequately tested yet!  Set it going!
 		{
-			manager.resetStudentFolder(nextData);
-			nextTest = new FutureTask<Boolean>(new TestingTask<T>(nextData, manager));//(test(data, testSpec))  // We'll want output.
+			nextData.resetFolder();
+			nextTest = new FutureTask<Boolean>(new TestingTask<T>(nextData, testSpec));//(test(data, testSpec))  // We'll want output.
 			new Thread(nextTest).start(); // Asynchronously begin testing.
 		}
 		
@@ -220,24 +220,24 @@ public class GradingEngine
 					
 					if(nextData == null) break;
 					
-					status = manager.isStudentFolderPresent(nextData);
+					status = nextData.getFolderStatus();
 					if(nextData.getAnalysis() == null && (status == StudentFolderStatus.MISSING || status == StudentFolderStatus.OLD))
 						continue;
 					
 					break;
 				}
 				
-				if(manager.isStudentFolderPresent(nextData) == StudentFolderStatus.NEW)
+				if(nextData.getFolderStatus() == StudentFolderStatus.NEW)
 				{
-					manager.resetStudentFolder(nextData);
+					nextData.resetFolder();
 				}
 				
 				if(nextData != null)
 				{
 					if(nextData.getComments() == null) // This data hasn't been adequately tested yet!  Set it going!
 					{
-						manager.resetStudentFolder(nextData);
-						nextTest = new FutureTask<Boolean>(new TestingTask<T>(nextData, manager));//(test(data, testSpec))  // We'll want output.
+						nextData.resetFolder();
+						nextTest = new FutureTask<Boolean>(new TestingTask<T>(nextData, testSpec));//(test(data, testSpec))  // We'll want output.
 						new Thread(nextTest).start(); // Asynchronously begin testing.
 					}
 					else nextTest = null;
@@ -261,7 +261,7 @@ public class GradingEngine
 		while(dataIter.hasNext() || nextData != null);
 	}
 	
-	public static <T extends LMSAssignmentManager.LMSDataTag> void review(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> void review(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
 	{
 		Iterator<StudentData<T>> dataIter = manager.iterator();
 		
@@ -303,20 +303,18 @@ public class GradingEngine
 		}
 	}
 
-	public static <T extends LMSAssignmentManager.LMSDataTag> boolean runSingle(StudentData<T> data, LMSAssignmentManager<T> manager)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> boolean runSingle(StudentData<T> data, TestSpecification testSpec)
 	{
-		TestSpecification testSpec = manager.getTestSpecification();
-		
 		// Special setup for first element to process.
-		StudentFolderStatus status = manager.isStudentFolderPresent(data);
+		StudentFolderStatus status = data.getFolderStatus();
 		if(status == StudentFolderStatus.NEW)
 		{
-			manager.resetStudentFolder(data);
+			data.resetFolder();
 		}
 		
 		FutureTask<Boolean> nextTest = null;
 		
-		nextTest = new FutureTask<Boolean>(new TestingTask<T>(data, manager));//(test(data, testSpec))  // We'll want output.
+		nextTest = new FutureTask<Boolean>(new TestingTask<T>(data, testSpec));//(test(data, testSpec))  // We'll want output.
 		new Thread(nextTest).start(); // Asynchronously begin testing.
 		
 		System.out.println("Student: " + data.first + " " + data.last);
@@ -327,20 +325,18 @@ public class GradingEngine
 		return testSuccess;
 	}
 	
-	private static <T extends LMSAssignmentManager.LMSDataTag> boolean test(StudentData<T> data, LMSAssignmentManager<T> manager)
+	private static <T extends LMSAssignmentManager.LMSDataTag<T>> boolean test(StudentData<T> data, TestSpecification testSpec)
 	{    	
     	//System.out.println();
     	//System.out.println("Student: " + data.first + " " + data.last);
-		
-		TestSpecification testSpec = manager.getTestSpecification();
     	
     	Map<TestCase, TestResult> results = null;
     	TestingException error = null;
     	
-    	StudentFolderStatus status = manager.isStudentFolderPresent(data);
+    	StudentFolderStatus status = data.getFolderStatus();
 		if(status == StudentFolderStatus.NEW)
 		{
-			manager.resetStudentFolder(data);
+			data.resetFolder();
 		}
 		else if(status == StudentFolderStatus.MISSING || status == StudentFolderStatus.OLD) throw new IllegalStateException(); 
     	

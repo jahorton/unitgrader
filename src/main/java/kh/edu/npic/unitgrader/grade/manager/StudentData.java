@@ -8,7 +8,7 @@ import java.util.Map;
 import kh.edu.npic.unitgrader.grade.results.TestResult;
 import kh.edu.npic.unitgrader.util.TestCase;
 
-public class StudentData<Tag extends LMSAssignmentManager.LMSDataTag>
+public class StudentData<Tag extends LMSAssignmentManager.LMSDataTag<Tag>>
 {
 	// These two ought be set once the student's submission is properly decompressed/readied for test file application.
 	// Compare id + timestamp being loaded to know if the submission should be replaced.
@@ -86,7 +86,7 @@ public class StudentData<Tag extends LMSAssignmentManager.LMSDataTag>
 	}
 	
 	// TODO:  Is this really appropriate?
-	public void setTag(Tag tag)
+	void setTag(Tag tag)
 	{
 		this.tag = tag;
 	}
@@ -217,5 +217,19 @@ public class StudentData<Tag extends LMSAssignmentManager.LMSDataTag>
 		
 		this.baseFolder = folder.toString().replaceAll("\\\\", "/");
 		this.timestamp = timestamp;
+	}
+	
+	public StudentFolderStatus getFolderStatus() {
+		if(this.tag == null) {
+			throw new NullPointerException("Cannot find folder status for a StudentData detached from any LMSAssignmentManager!");
+		}
+		return this.tag.getFolderStatus(this);
+	}
+	
+	public boolean resetFolder() {
+		if(this.tag == null) {
+			throw new NullPointerException("Cannot reset folder for a StudentData detached from any LMSAssignmentManager!");
+		}
+		return this.tag.resetStudentFolder(this);
 	}
 }

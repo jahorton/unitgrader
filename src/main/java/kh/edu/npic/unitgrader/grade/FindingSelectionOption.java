@@ -39,7 +39,7 @@ public class FindingSelectionOption extends Option
 			{
 				if(data.getComments() == null)
 				{
-					boolean testSuccess = GradingEngine.runSingle(data, manager);
+					boolean testSuccess = GradingEngine.runSingle(data, manager.getTestSpecification());
 					
 					if(testSuccess)
 					{
@@ -62,7 +62,7 @@ public class FindingSelectionOption extends Option
 				else
 				{
 					// Never compiled - but what if they want to re-test it?
-					boolean testSuccess = GradingEngine.runSingle(data, manager);
+					boolean testSuccess = GradingEngine.runSingle(data, manager.getTestSpecification());
 					
 					if(testSuccess)
 					{

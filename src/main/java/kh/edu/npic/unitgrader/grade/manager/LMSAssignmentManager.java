@@ -23,7 +23,7 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
  * @author Joshua A. Horton
  *
  */
-public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDataTag> implements Iterable<StudentData<TagType>>
+public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDataTag<TagType>> implements Iterable<StudentData<TagType>>
 {
 	// Internal file management constants.
 	public static final String EXPORT_INTERMEDIATE_FOLDER = ".exports";
@@ -168,7 +168,7 @@ public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.
 	}
 	
 	// Allows the results of separate grading runs to be merged into a single results file.
-	public boolean mergeResults(SavedResults<TagType> setToMerge)
+	public boolean mergeResults(SavedResults<?> setToMerge)
 	{
 		boolean success = this.results.merge(setToMerge);
 
@@ -256,11 +256,13 @@ public abstract class LMSAssignmentManager<TagType extends LMSAssignmentManager.
 	 * @author Joshua A. Horton
 	 *
 	 */
-	public static interface LMSDataTag
+	public static interface LMSDataTag<T extends LMSDataTag<T>>
 	{
+		StudentFolderStatus getFolderStatus(StudentData<T> data);
+		boolean resetStudentFolder(StudentData<T> data);
 	}
 	
-	static class StudentDataComparator<TagType extends LMSAssignmentManager.LMSDataTag> implements Comparator<StudentData<TagType>>
+	static class StudentDataComparator<TagType extends LMSAssignmentManager.LMSDataTag<TagType>> implements Comparator<StudentData<TagType>>
 	{
 
 		@Override

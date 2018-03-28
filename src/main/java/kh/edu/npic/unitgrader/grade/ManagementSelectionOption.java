@@ -16,9 +16,9 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class ManagementSelectionOption extends Option
 {
-	private final LMSAssignmentManager manager;
+	private final LMSAssignmentManager<?> manager;
 	
-	public ManagementSelectionOption(LMSAssignmentManager manager)
+	public ManagementSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("Manage loaded grading results.");
 		
@@ -76,7 +76,7 @@ public class ManagementSelectionOption extends Option
 			    		return false;
 			    }
 				
-			    SavedResults result;
+			    SavedResults<?> result;
 			    try
 				{
 					result = SavedResults.load(chooseTest.getSelectedFile());

@@ -15,9 +15,9 @@ import kh.edu.npic.unitgrader.util.console.Option;
 
 public class GradingSelectionOption extends Option
 {
-	private LMSAssignmentManager manager;
+	private LMSAssignmentManager<?> manager;
 
-	public GradingSelectionOption(LMSAssignmentManager manager)
+	public GradingSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("Grade/regrade assignments.");
 		
@@ -30,9 +30,9 @@ public class GradingSelectionOption extends Option
 	    class FilterGradingOption extends Option
 	    {
 	    	StudentConditionFilter filter;
-	    	LMSAssignmentManager manager;
+	    	LMSAssignmentManager<?> manager;
 	    	
-			public FilterGradingOption(String text, StudentConditionFilter filter, LMSAssignmentManager manager)
+			public FilterGradingOption(String text, StudentConditionFilter filter, LMSAssignmentManager<?> manager)
 			{
 				super(text);
 
@@ -58,7 +58,7 @@ public class GradingSelectionOption extends Option
 	    menu.add(new FilterGradingOption("Grade all students' data.", new AllStudentsFilter(), manager));
 	    menu.add(new FilterGradingOption("Grade unviewed submissions, skipping any previously skipped submission.", new UnviewedStudentsFilter(), manager));
 	    menu.add(new FilterGradingOption("Grade ungraded submissions.", new UngradedStudentsFilter(), manager));
-	    menu.add(new FilterGradingOption("Grade only updated submissions.", new NewSubmissionFilter(manager), manager));
+	    menu.add(new FilterGradingOption("Grade only updated submissions.", new NewSubmissionFilter(), manager));
 	    menu.add(new FilterGradingOption("Grade previously skipped submissions.", new SkippedStudentsFilter(), manager));
 	    menu.add(new FilterGradingOption("Grade previously flagged submissions.", new FlaggedStudentsFilter(), manager));
 	    menu.add(new EndMenuOption());

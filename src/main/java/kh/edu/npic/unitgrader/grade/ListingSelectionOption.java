@@ -15,9 +15,9 @@ import kh.edu.npic.unitgrader.util.console.Option;
 
 public class ListingSelectionOption extends Option
 {
-	private LMSAssignmentManager manager;
+	private LMSAssignmentManager<?> manager;
 
-	public ListingSelectionOption(LMSAssignmentManager manager)
+	public ListingSelectionOption(LMSAssignmentManager<?> manager)
 	{
 		super("List all students based on selected criteria.");
 		
@@ -30,10 +30,10 @@ public class ListingSelectionOption extends Option
 	    class FilterListingOption extends Option
 	    {
 	    	StudentConditionFilter filter;
-	    	LMSAssignmentManager manager;
+	    	LMSAssignmentManager<?> manager;
 	    	String filterExplanation;
 	    	
-			public FilterListingOption(String text, StudentConditionFilter filter, LMSAssignmentManager manager, String filterExplanation)
+			public FilterListingOption(String text, StudentConditionFilter filter, LMSAssignmentManager<?> manager, String filterExplanation)
 			{
 				super(text);
 
@@ -62,7 +62,7 @@ public class ListingSelectionOption extends Option
 	    menu.add(new FilterListingOption("List students who were skipped.", new SkippedStudentsFilter(), manager, "Students intentionally skipped during grading"));
 	    menu.add(new FilterListingOption("List students who were flagged.", new FlaggedStudentsFilter(), manager, "Students flagged during grading for review."));
 	    menu.add(new FilterListingOption("List students whose work hasn't been viewed.", new UnviewedStudentsFilter(), manager, "Students whose work has not yet been viewed or analyzed."));
-	    menu.add(new FilterListingOption("List students who have new submissions.", new NewSubmissionFilter(manager), manager, "Students with new submissions."));
+	    menu.add(new FilterListingOption("List students who have new submissions.", new NewSubmissionFilter(), manager, "Students with new submissions."));
 	    menu.add(new EndMenuOption());
 	    
 	    menu.run();
