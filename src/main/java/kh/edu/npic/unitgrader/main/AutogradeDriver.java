@@ -113,7 +113,7 @@ public class AutogradeDriver
 				data.resetFlags();
 				data.setFlaggedStatus(flagged);
 				
-				boolean result = GradingEngine.runSingle(data, manager);
+				boolean result = GradingEngine.runSingle(data, manager.getTestSpecification());
 				
 				if(result)
 				{
@@ -395,7 +395,7 @@ public class AutogradeDriver
 				data.resetFlags();
 				data.setFlaggedStatus(flagged);
 				
-				boolean result = GradingEngine.runSingle(data, manager);
+				boolean result = GradingEngine.runSingle(data, manager.getTestSpecification());
 				
 				if(result)
 				{

@@ -52,6 +52,11 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 		public StudentFolderStatus getFolderStatus(StudentData<CanvasData> data) {
 			return CanvasAssignmentManager.this.isStudentFolderPresent(data);
 		}
+		
+		@Override
+		public boolean resetStudentFolder(StudentData<CanvasData> data) {
+			return CanvasAssignmentManager.this.resetStudentFolder(data);
+		}
 	}
 	
 	//private final File baseDirectory;

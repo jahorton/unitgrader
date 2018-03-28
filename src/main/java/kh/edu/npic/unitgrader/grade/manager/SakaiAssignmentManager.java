@@ -38,6 +38,11 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 		public StudentFolderStatus getFolderStatus(StudentData<SakaiData> data) {
 			return SakaiAssignmentManager.this.isStudentFolderPresent(data);
 		}
+		
+		@Override
+		public boolean resetStudentFolder(StudentData<SakaiData> data) {
+			return SakaiAssignmentManager.this.resetStudentFolder(data);
+		}
 	}
 	
 	//private final File baseDirectory;  // No longer used; this is replaced by the DirectoryManager.

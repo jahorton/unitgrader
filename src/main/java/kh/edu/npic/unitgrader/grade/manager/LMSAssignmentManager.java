@@ -74,5 +74,6 @@ public interface LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDa
 	static interface LMSDataTag<T extends LMSDataTag<T>>
 	{
 		StudentFolderStatus getFolderStatus(StudentData<T> data);
+		boolean resetStudentFolder(StudentData<T> data);
 	}
 }

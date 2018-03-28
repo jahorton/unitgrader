@@ -225,4 +225,11 @@ public class StudentData<Tag extends LMSAssignmentManager.LMSDataTag<Tag>>
 		}
 		return this.tag.getFolderStatus(this);
 	}
+	
+	public boolean resetFolder() {
+		if(this.tag == null) {
+			throw new NullPointerException("Cannot reset folder for a StudentData detached from any LMSAssignmentManager!");
+		}
+		return this.tag.resetStudentFolder(this);
+	}
 }

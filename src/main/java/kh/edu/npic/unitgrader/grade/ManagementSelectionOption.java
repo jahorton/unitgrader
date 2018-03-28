@@ -87,15 +87,11 @@ public class ManagementSelectionOption extends Option
 					return false;
 				}
 				
-			    boolean mergeSuccess = false;
-			    if(manager.getName().equals(result.testSpec.getLMSIdentifier())) {
-				    if(manager.mergeResults(result))
-				    {
-				    	System.out.println("Merge successful.");
-				    }
+			    if(manager.mergeResults(result))
+			    {
+			    	System.out.println("Merge successful.");
 			    }
-
-			    if(!mergeSuccess)
+			    else
 			    {
 			    	System.out.println("Requested merge could not be performed.");
 			    }
