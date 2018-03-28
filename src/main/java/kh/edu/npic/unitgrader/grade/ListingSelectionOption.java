@@ -62,7 +62,7 @@ public class ListingSelectionOption extends Option
 	    menu.add(new FilterListingOption("List students who were skipped.", new SkippedStudentsFilter(), manager, "Students intentionally skipped during grading"));
 	    menu.add(new FilterListingOption("List students who were flagged.", new FlaggedStudentsFilter(), manager, "Students flagged during grading for review."));
 	    menu.add(new FilterListingOption("List students whose work hasn't been viewed.", new UnviewedStudentsFilter(), manager, "Students whose work has not yet been viewed or analyzed."));
-	    menu.add(new FilterListingOption("List students who have new submissions.", new NewSubmissionFilter(manager), manager, "Students with new submissions."));
+	    menu.add(new FilterListingOption("List students who have new submissions.", new NewSubmissionFilter(), manager, "Students with new submissions."));
 	    menu.add(new EndMenuOption());
 	    
 	    menu.run();

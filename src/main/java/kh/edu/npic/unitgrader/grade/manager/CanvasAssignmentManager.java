@@ -34,7 +34,7 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssignmentManager.CanvasData>
 {	
-	public class CanvasData implements LMSAssignmentManager.LMSDataTag
+	public class CanvasData implements LMSAssignmentManager.LMSDataTag<CanvasData>
 	{
 		private String originalZipName;
 		
@@ -46,6 +46,11 @@ public class CanvasAssignmentManager implements LMSAssignmentManager<CanvasAssig
 		public String getArchiveName()
 		{
 			return originalZipName;
+		}
+
+		@Override
+		public StudentFolderStatus getFolderStatus(StudentData<CanvasData> data) {
+			return CanvasAssignmentManager.this.isStudentFolderPresent(data);
 		}
 	}
 	

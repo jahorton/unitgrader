@@ -6,17 +6,11 @@ import kh.edu.npic.unitgrader.grade.manager.StudentFolderStatus;
 
 public class NewSubmissionFilter implements StudentConditionFilter
 {
-	private LMSAssignmentManager<?> manager;
-	
-	public NewSubmissionFilter(LMSAssignmentManager<?> manager)
-	{
-		this.manager = manager;
-	}
 
 	@Override
-	public <T extends LMSAssignmentManager.LMSDataTag> boolean matches(StudentData<T> data)
+	public <T extends LMSAssignmentManager.LMSDataTag<T>> boolean matches(StudentData<T> data)
 	{
-		return (manager.isStudentFolderPresent((StudentData)data) == StudentFolderStatus.NEW) || !data.isGraded() && !data.getSkippedFlag();
+		return (data.getFolderStatus() == StudentFolderStatus.NEW) || !data.isGraded() && !data.getSkippedFlag();
 	}
 
 }

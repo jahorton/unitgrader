@@ -19,7 +19,7 @@ public class FilterUnion implements StudentConditionFilter
 	}
 	
 	@Override
-	public <T extends LMSAssignmentManager.LMSDataTag> boolean matches(StudentData<T> data)
+	public <T extends LMSAssignmentManager.LMSDataTag<T>> boolean matches(StudentData<T> data)
 	{
 		for(StudentConditionFilter filter:filters)
 		{

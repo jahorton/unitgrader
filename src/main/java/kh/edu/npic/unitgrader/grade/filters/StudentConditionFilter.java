@@ -5,5 +5,5 @@ import kh.edu.npic.unitgrader.grade.manager.StudentData;
 
 public interface StudentConditionFilter
 {
-	public <T extends LMSAssignmentManager.LMSDataTag> boolean matches(StudentData<T> data);
+	public <T extends LMSAssignmentManager.LMSDataTag<T>> boolean matches(StudentData<T> data);
 }

@@ -32,8 +32,12 @@ import kh.edu.npic.unitgrader.util.preferences.DirectoryManager;
 
 public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignmentManager.SakaiData>
 {
-	public class SakaiData implements LMSAssignmentManager.LMSDataTag
+	public class SakaiData implements LMSAssignmentManager.LMSDataTag<SakaiData>
 	{
+		@Override
+		public StudentFolderStatus getFolderStatus(StudentData<SakaiData> data) {
+			return SakaiAssignmentManager.this.isStudentFolderPresent(data);
+		}
 	}
 	
 	//private final File baseDirectory;  // No longer used; this is replaced by the DirectoryManager.
@@ -174,7 +178,10 @@ public class SakaiAssignmentManager implements LMSAssignmentManager<SakaiAssignm
 		
 		// Open the file, read its contents.
 		Scanner input = new Scanner(new FileInputStream(files[0]));
-		return input.nextLong(); // Is the only line in the file.
+		long stamp = input.nextLong(); // Is the only line in the file.
+		input.close();
+		
+		return stamp;
 	}
 	
 	public Map<String, StudentData<SakaiData>> getStudentIDMap()

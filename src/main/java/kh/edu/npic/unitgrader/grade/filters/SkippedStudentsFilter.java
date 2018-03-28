@@ -7,7 +7,7 @@ public class SkippedStudentsFilter implements StudentConditionFilter
 {
 
 	@Override
-	public <T extends LMSAssignmentManager.LMSDataTag> boolean matches(StudentData<T> data)
+	public <T extends LMSAssignmentManager.LMSDataTag<T>> boolean matches(StudentData<T> data)
 	{
 		return data.getSkippedFlag();
 	}

@@ -20,7 +20,7 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
 
 public class GradingEngine
 {
-	private static class TestingTask<TagType extends LMSAssignmentManager.LMSDataTag> implements Callable<Boolean>
+	private static class TestingTask<TagType extends LMSAssignmentManager.LMSDataTag<TagType>> implements Callable<Boolean>
 	{
 		StudentData<TagType> data;
 		LMSAssignmentManager<TagType> manager;
@@ -121,7 +121,7 @@ public class GradingEngine
 		return testSuccess;
 	}
 	
-	public static <T extends LMSAssignmentManager.LMSDataTag> void run(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> void run(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
 	{
 		TestSpecification testSpec = manager.getTestSpecification();
 		
@@ -261,7 +261,7 @@ public class GradingEngine
 		while(dataIter.hasNext() || nextData != null);
 	}
 	
-	public static <T extends LMSAssignmentManager.LMSDataTag> void review(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> void review(LMSAssignmentManager<T> manager, StudentConditionFilter filter)
 	{
 		Iterator<StudentData<T>> dataIter = manager.iterator();
 		
@@ -303,7 +303,7 @@ public class GradingEngine
 		}
 	}
 
-	public static <T extends LMSAssignmentManager.LMSDataTag> boolean runSingle(StudentData<T> data, LMSAssignmentManager<T> manager)
+	public static <T extends LMSAssignmentManager.LMSDataTag<T>> boolean runSingle(StudentData<T> data, LMSAssignmentManager<T> manager)
 	{
 		TestSpecification testSpec = manager.getTestSpecification();
 		
@@ -327,7 +327,7 @@ public class GradingEngine
 		return testSuccess;
 	}
 	
-	private static <T extends LMSAssignmentManager.LMSDataTag> boolean test(StudentData<T> data, LMSAssignmentManager<T> manager)
+	private static <T extends LMSAssignmentManager.LMSDataTag<T>> boolean test(StudentData<T> data, LMSAssignmentManager<T> manager)
 	{    	
     	//System.out.println();
     	//System.out.println("Student: " + data.first + " " + data.last);

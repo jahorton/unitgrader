@@ -15,7 +15,7 @@ import kh.edu.npic.unitgrader.util.TestSpecification;
  * @author Joshua A. Horton
  *
  */
-public interface LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDataTag> extends Iterable<StudentData<TagType>>
+public interface LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDataTag<TagType>> extends Iterable<StudentData<TagType>>
 {
 	public static final String EXPORT_INTERMEDIATE_FOLDER = ".exports";
 	public static final String EXPORT_FINALIZED_FOLDER = "_results";
@@ -71,7 +71,8 @@ public interface LMSAssignmentManager<TagType extends LMSAssignmentManager.LMSDa
 	 * @author Joshua A. Horton
 	 *
 	 */
-	public static interface LMSDataTag
+	static interface LMSDataTag<T extends LMSDataTag<T>>
 	{
+		StudentFolderStatus getFolderStatus(StudentData<T> data);
 	}
 }

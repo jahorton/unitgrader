@@ -52,7 +52,7 @@ public class AutogradeDriver
 		menu.run();	    
 	}
 	
-	public static <T extends LMSDataTag> void studentNoncompileMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager)
+	public static <T extends LMSDataTag<T>> void studentNoncompileMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager)
 	{
 		System.out.println();
 		System.out.println("Testing attempt failed; cannot continue grading this submission as it is.");
@@ -207,7 +207,7 @@ public class AutogradeDriver
 		menu.run();
 	}
 	
-	public static <T extends LMSDataTag> void studentGradingMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager, final AutogradeResults gradingResults)
+	public static <T extends LMSDataTag<T>> void studentGradingMenu(final StudentData<T> data, final LMSAssignmentManager<T> manager, final AutogradeResults gradingResults)
 	{
 		System.out.println();
 		System.out.println("Suggested score for " + data.first + "  " + data.last + ": " + gradingResults.grade);

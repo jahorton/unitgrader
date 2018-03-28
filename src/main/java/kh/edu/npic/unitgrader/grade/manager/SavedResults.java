@@ -9,7 +9,7 @@ import java.util.Map;
 import kh.edu.npic.unitgrader.util.Serialization;
 import kh.edu.npic.unitgrader.util.TestSpecification;
 
-public class SavedResults<TagType extends LMSAssignmentManager.LMSDataTag>
+public class SavedResults<TagType extends LMSAssignmentManager.LMSDataTag<TagType>>
 {
 	public static final String DATA_FILENAME = "results.xml";
 	
@@ -41,7 +41,7 @@ public class SavedResults<TagType extends LMSAssignmentManager.LMSDataTag>
 		this.testDirectory = testDirectory;
 	}
 	
-	public static SavedResults<? extends LMSAssignmentManager.LMSDataTag> load(File resultsFile) throws FileNotFoundException
+	public static SavedResults<? extends LMSAssignmentManager.LMSDataTag<?>> load(File resultsFile) throws FileNotFoundException
 	{
 		if(Files.exists(resultsFile.toPath()))
 		{
